@@ -156,13 +156,78 @@ export interface ReportContent {
   highlights: string[]
   weaknesses: string[]
   full_report?: string
+  /** 完整的 AI 多维度分析 JSON（V2 新报告） */
+  analysis_data?: string
 }
 
-/** 技术栈分析 */
+/** 技术栈分析（旧版） */
 export interface TechStackAnalysis {
   matched: string
   missing: string
   recommendation: string
+}
+
+/** 新版多维度分析报告数据结构 */
+export interface AnalysisData {
+  match_score: number
+  score_breakdown: {
+    skill_match: number
+    experience_match: number
+    project_match: number
+    education_match: number
+  }
+  skill_analysis: {
+    matched: SkillItem[]
+    partial: SkillItem[]
+    missing: MissingSkillItem[]
+  }
+  project_analysis: ProjectAnalysisItem[]
+  experience_assessment: {
+    years_match: string
+    career_progression: string
+    industry_relevance: string
+    assessment: string
+  }
+  education_assessment: {
+    degree: string
+    school_tier: string
+    major_relevance: string
+    assessment: string
+  }
+  competitive_advantages: string[]
+  weaknesses: string[]
+  improvement_roadmap: {
+    short_term: string[]
+    mid_term: string[]
+    long_term: string[]
+  }
+  interview_tips: string[]
+  full_report: string
+}
+
+export interface SkillItem {
+  name: string
+  level: string
+  relevance: string
+  assessment: string
+}
+
+export interface MissingSkillItem {
+  name: string
+  relevance: string
+  impact: string
+  priority: string
+  suggestion: string
+}
+
+export interface ProjectAnalysisItem {
+  name: string
+  relevance: string
+  complexity: string
+  tech_stack: string
+  role_assessment: string
+  assessment: string
+  suggestion: string
 }
 
 /** 面试会话 */
