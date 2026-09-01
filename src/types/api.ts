@@ -142,7 +142,9 @@ export interface PositionVO {
 export interface ReportVO {
   id: number
   resume_id: number
+  resume_name: string
   position_id: number
+  position_title: string
   status: number
   content?: ReportContent
   created_at: string

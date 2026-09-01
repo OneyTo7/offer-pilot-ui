@@ -60,11 +60,67 @@
         </el-card>
       </el-col>
     </el-row>
+
+    <el-row :gutter="20" style="margin-top: 20px">
+      <el-col :span="12">
+        <el-card shadow="never">
+          <template #header>
+            <div class="card-header">
+              <el-icon><Lock /></el-icon>
+              <span>安全与隐私</span>
+            </div>
+          </template>
+          <div class="info-list">
+            <div class="info-item">
+              <el-tag size="small" type="success">已加密</el-tag>
+              <span>API Key 使用 AES-256-GCM 加密存储</span>
+            </div>
+            <div class="info-item">
+              <el-tag size="small" type="success">已隔离</el-tag>
+              <span>所有用户数据按 user_id 严格隔离</span>
+            </div>
+            <div class="info-item">
+              <el-tag size="small" type="warning">透明</el-tag>
+              <span>Token 用量实时统计，详情见 <el-link type="primary" @click="$router.push('/ai')">大模型配置</el-link></span>
+            </div>
+            <div class="info-item">
+              <el-tag size="small" type="info">BCrypt</el-tag>
+              <span>密码经 BCrypt 哈希存储，不可逆</span>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+      <el-col :span="12">
+        <el-card shadow="never">
+          <template #header>
+            <div class="card-header">
+              <el-icon><ChatDotSquare /></el-icon>
+              <span>加入社区</span>
+            </div>
+          </template>
+          <div class="info-list">
+            <div class="info-item">
+              <el-icon color="#409eff"><Star /></el-icon>
+              <a href="https://github.com/lidaoqi/offer-pilot" target="_blank" class="community-link">GitHub 给个 Star ⭐</a>
+            </div>
+            <div class="info-item">
+              <el-icon color="#67c23a"><ChatDotSquare /></el-icon>
+              <span>扫码加群：<el-tag size="small">lidaoqi_dev</el-tag>（作者微信）</span>
+            </div>
+            <div class="info-item">
+              <el-icon color="#e6a23c"><Reading /></el-icon>
+              <span>本项目基于 <a href="https://github.com/lidaoqi/offer-pilot/blob/main/LICENSE" target="_blank">MIT 协议</a> 开源</span>
+            </div>
+          </div>
+        </el-card>
+      </el-col>
+    </el-row>
   </div>
 </template>
 
 <script setup lang="ts">
 import { onMounted, reactive } from 'vue'
+import { Lock, ChatDotSquare, Star, Reading } from '@element-plus/icons-vue'
 import { getResumeList } from '../../api/resume'
 import { getPositionList } from '../../api/position'
 import { getReportList } from '../../api/report'
@@ -114,5 +170,31 @@ onMounted(async () => {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
+}
+.card-header {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-weight: 600;
+}
+.info-list {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+.info-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #606266;
+}
+.community-link {
+  color: #409eff;
+  text-decoration: none;
+  font-weight: 500;
+}
+.community-link:hover {
+  text-decoration: underline;
 }
 </style>

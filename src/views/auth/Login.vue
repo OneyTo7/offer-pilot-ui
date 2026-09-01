@@ -20,6 +20,13 @@
         还没有账号？<router-link to="/register">立即注册</router-link>
       </div>
     </el-card>
+    <div class="login-community">
+      <span>🔒 数据加密 · 用户隔离</span>
+      <span class="sep">|</span>
+      <a href="https://github.com/lidaoqi/offer-pilot" target="_blank">⭐ GitHub</a>
+      <span class="sep">|</span>
+      <span>📱 加群：lidaoqi_dev</span>
+    </div>
   </div>
 </template>
 
@@ -86,5 +93,23 @@ async function handleLogin() {
 .login-footer {
   text-align: center;
   color: #666;
+}
+.login-community {
+  margin-top: 16px;
+  text-align: center;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+}
+.login-community .sep {
+  margin: 0 8px;
+  opacity: 0.4;
+}
+.login-community a {
+  color: rgba(255, 255, 255, 0.85);
+  text-decoration: none;
+}
+.login-community a:hover {
+  text-decoration: underline;
+  color: #fff;
 }
 </style>

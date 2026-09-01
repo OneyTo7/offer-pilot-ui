@@ -63,6 +63,11 @@ const router = createRouter({
           component: () => import('../views/interview/InterviewSession.vue'),
         },
         {
+          path: 'ai',
+          name: 'AiModel',
+          component: () => import('../views/ai/AiModel.vue'),
+        },
+        {
           path: 'knowledge',
           name: 'KnowledgeList',
           component: () => import('../views/knowledge/KnowledgeList.vue'),

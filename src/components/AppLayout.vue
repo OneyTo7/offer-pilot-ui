@@ -31,6 +31,10 @@
           <el-icon><ChatDotSquare /></el-icon>
           <span>模拟面试</span>
         </el-menu-item>
+        <el-menu-item index="/ai">
+          <el-icon><Cpu /></el-icon>
+          <span>大模型</span>
+        </el-menu-item>
         <el-menu-item index="/knowledge">
           <el-icon><Collection /></el-icon>
           <span>知识库</span>

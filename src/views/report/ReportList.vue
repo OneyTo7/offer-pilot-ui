@@ -9,6 +9,8 @@
 
     <el-table :data="reports" v-loading="loading" stripe>
       <el-table-column prop="id" label="ID" width="80" />
+      <el-table-column prop="resume_name" label="简历" min-width="150" show-overflow-tooltip />
+      <el-table-column prop="position_title" label="目标职位" min-width="180" show-overflow-tooltip />
       <el-table-column label="匹配度" width="120">
         <template #default="{ row }">
           <el-tag v-if="row.content?.match_score" :type="scoreType(row.content.match_score)">
@@ -19,8 +21,8 @@
       </el-table-column>
       <el-table-column prop="status" label="状态" width="120">
         <template #default="{ row }">
-          <el-tag :type="row.status === 0 ? 'warning' : 'success'">
-            {{ row.status === 0 ? '生成中' : '已完成' }}
+          <el-tag :type="row.status === 0 ? 'warning' : row.status === 2 ? 'danger' : 'success'">
+            {{ row.status === 0 ? '生成中' : row.status === 2 ? '生成失败' : '已完成' }}
           </el-tag>
         </template>
       </el-table-column>
