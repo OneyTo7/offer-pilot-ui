@@ -159,13 +159,17 @@ onMounted(() => {
 }
 
 .page-title {
-  margin-bottom: 20px;
+  font-family: var(--font-display);
   font-size: 22px;
-  font-weight: 600;
+  font-weight: 700;
+  color: var(--color-text-primary);
+  margin-bottom: 20px;
 }
 
 .section-card {
   margin-bottom: 20px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
 }
 
 .card-header {
@@ -178,7 +182,7 @@ onMounted(() => {
 .intro-text {
   margin-bottom: 20px;
   line-height: 1.8;
-  color: #606266;
+  color: var(--color-text-secondary);
 }
 
 .tier-info {
@@ -196,12 +200,12 @@ onMounted(() => {
 
 .how-to {
   line-height: 1.8;
-  color: #606266;
+  color: var(--color-text-secondary);
 }
 
 .how-to h4 {
   margin-bottom: 8px;
-  color: #303133;
+  color: var(--color-text-primary);
 }
 
 .how-to ol {
@@ -209,13 +213,14 @@ onMounted(() => {
 }
 
 .how-to code {
-  background: #f5f7fa;
+  background: var(--color-bg-subtle);
   padding: 2px 6px;
   border-radius: 4px;
   font-size: 13px;
+  font-family: var(--font-mono);
 }
 
 .how-to a {
-  color: #409eff;
+  color: var(--color-primary);
 }
 </style>

@@ -31,6 +31,12 @@ request.interceptors.response.use(
   (response) => {
     const data = response.data as ApiResult
     if (data.code !== 200) {
+      // 401 → 未登录或登录过期，清除 token 并跳转登录页
+      if (data.code === 401) {
+        clearTokens()
+        window.location.href = '/login'
+        return Promise.reject(new Error(data.message))
+      }
       ElMessage.error(data.message || '请求失败')
       return Promise.reject(new Error(data.message))
     }
@@ -57,6 +63,7 @@ request.interceptors.response.use(
       const refreshToken = getRefreshToken()
       if (!refreshToken) {
         clearTokens()
+        ElMessage.error('登录已过期，请重新登录')
         window.location.href = '/login'
         return Promise.reject(error)
       }
@@ -65,13 +72,19 @@ request.interceptors.response.use(
         const res = await axios.post<ApiResult<TokenResponse>>('/api/v1/auth/refresh', {
           refresh_token: refreshToken,
         })
+        // 后端返回了业务错误（如刷新令牌无效）
+        if (res.data.code !== 200 || !res.data.data) {
+          throw new Error(res.data.message || '刷新令牌失败')
+        }
         const { access_token, refresh_token } = res.data.data
         setTokens(access_token, refresh_token)
         onRefreshed(access_token)
         config.headers.Authorization = `Bearer ${access_token}`
         return request(config)
-      } catch {
+      } catch (refreshError: any) {
         clearTokens()
+        const msg = refreshError?.response?.data?.message || refreshError?.message || '登录已过期，请重新登录'
+        ElMessage.error(msg)
         window.location.href = '/login'
         return Promise.reject(error)
       } finally {
@@ -79,7 +92,9 @@ request.interceptors.response.use(
       }
     }
 
-    ElMessage.error(error.message || '网络错误')
+    // 非 401 错误，优先显示后端返回的错误消息
+    const msg = (error.response?.data as ApiResult)?.message || error.message || '网络错误'
+    ElMessage.error(msg)
     return Promise.reject(error)
   }
 )

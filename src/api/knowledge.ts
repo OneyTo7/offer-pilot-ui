@@ -1,13 +1,16 @@
 import request from './request'
-import type { ApiResult, KnowledgeDocumentVO, KnowledgeDocumentDetailVO } from '../types/api'
+import type { ApiResult, KnowledgeDocumentVO, KnowledgeDocumentDetailVO, KnowledgeChunkVO } from '../types/api'
 
 export function createKnowledge(data: {
   title: string
   content_type: string
   content?: string
-  url?: string
 }) {
   return request.post<ApiResult<KnowledgeDocumentVO>>('/knowledge', data)
+}
+
+export function uploadKnowledge(formData: FormData) {
+  return request.post<ApiResult<KnowledgeDocumentVO>>('/knowledge/upload', formData)
 }
 
 export function getKnowledgeList() {
@@ -16,6 +19,10 @@ export function getKnowledgeList() {
 
 export function getKnowledgeDetail(id: number) {
   return request.get<ApiResult<KnowledgeDocumentDetailVO>>(`/knowledge/${id}`)
+}
+
+export function getKnowledgeChunks(id: number) {
+  return request.get<ApiResult<KnowledgeChunkVO[]>>(`/knowledge/${id}/chunks`)
 }
 
 export function deleteKnowledge(id: number) {

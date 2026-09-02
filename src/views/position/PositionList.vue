@@ -1,14 +1,14 @@
 <template>
-  <div class="position-list">
-    <div class="page-header">
-      <h2>目标职位</h2>
+  <PageContainer title="目标职位" subtitle="设定你的目标岗位，AI 将据此进行匹配分析">
+    <template #action>
       <el-button type="primary" @click="showDialog = true">
-        <el-icon><Plus /></el-icon> 添加职位
+        <el-icon><Plus /></el-icon>
+        添加职位
       </el-button>
-    </div>
+    </template>
 
-    <el-table :data="positions" v-loading="loading" stripe>
-      <el-table-column prop="title" label="职位名称" min-width="150" />
+    <el-table :data="positions" v-loading="loading" @row-click="handleRowClick">
+      <el-table-column prop="title" label="职位名称" min-width="160" />
       <el-table-column prop="company" label="公司" width="150" />
       <el-table-column prop="location" label="城市" width="100" />
       <el-table-column label="薪资范围" width="150">
@@ -16,45 +16,49 @@
           {{ row.salary_range || '-' }}
         </template>
       </el-table-column>
-      <el-table-column label="默认" width="80">
+      <el-table-column label="默认" width="80" align="center">
         <template #default="{ row }">
-          <el-tag v-if="row.is_default" type="success" size="small">默认</el-tag>
+          <el-tag v-if="row.is_default" type="success" size="small" effect="plain">默认</el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="创建时间" width="180" />
-      <el-table-column label="操作" width="200" fixed="right">
+      <el-table-column label="操作" min-width="160" fixed="right">
         <template #default="{ row }">
-          <el-button
-            v-if="!row.is_default"
-            size="small"
-            @click="handleSetDefault(row.id)"
-          >设为默认</el-button>
-          <el-popconfirm title="确定删除？" @confirm="handleDelete(row.id)">
-            <template #reference>
-              <el-button size="small" type="danger">删除</el-button>
-            </template>
-          </el-popconfirm>
+          <div class="action-btns">
+            <el-button
+              v-if="!row.is_default"
+              size="small"
+              text
+              type="primary"
+              @click.stop="handleSetDefault(row.id)"
+            >设为默认</el-button>
+            <el-popconfirm title="确定删除？" @confirm="handleDelete(row.id)">
+              <template #reference>
+                <el-button size="small" text type="danger" @click.stop>删除</el-button>
+              </template>
+            </el-popconfirm>
+          </div>
         </template>
       </el-table-column>
     </el-table>
 
     <!-- 添加职位对话框 -->
-    <el-dialog v-model="showDialog" title="添加目标职位" width="600px">
+    <el-dialog v-model="showDialog" title="添加目标职位" width="560px" :close-on-click-modal="false">
       <el-form ref="formRef" :model="form" :rules="rules" label-width="80px">
         <el-form-item label="职位名称" prop="title">
-          <el-input v-model="form.title" />
+          <el-input v-model="form.title" placeholder="如：高级 Java 工程师" />
         </el-form-item>
         <el-form-item label="公司">
           <el-input v-model="form.company" placeholder="可选" />
         </el-form-item>
         <el-form-item label="城市">
-          <el-input v-model="form.city" />
+          <el-input v-model="form.city" placeholder="可选" />
         </el-form-item>
         <el-form-item label="最低薪资">
-          <el-input-number v-model="form.salary_min" :min="0" :step="1" />
+          <el-input-number v-model="form.salary_min" :min="0" :step="1" :precision="0" />
         </el-form-item>
         <el-form-item label="最高薪资">
-          <el-input-number v-model="form.salary_max" :min="0" :step="1" />
+          <el-input-number v-model="form.salary_max" :min="0" :step="1" :precision="0" />
         </el-form-item>
         <el-form-item label="JD 描述" prop="jd_text">
           <el-input v-model="form.jd_text" type="textarea" :rows="6" placeholder="职位描述、任职要求..." />
@@ -65,7 +69,7 @@
         <el-button type="primary" :loading="submitting" @click="handleCreate">保存</el-button>
       </template>
     </el-dialog>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -73,6 +77,7 @@ import { ref, reactive, onMounted } from 'vue'
 import { ElMessage } from 'element-plus'
 import { getPositionList, createPosition, deletePosition, setDefaultPosition } from '../../api/position'
 import type { PositionVO } from '../../types/api'
+import PageContainer from '../../components/PageContainer.vue'
 
 const positions = ref<PositionVO[]>([])
 const loading = ref(false)
@@ -148,13 +153,8 @@ async function handleSetDefault(id: number) {
     ElMessage.error('设置失败')
   }
 }
-</script>
 
-<style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+function handleRowClick(_row: PositionVO) {
+  // 无详情页，仅做占位
 }
-</style>
+</script>

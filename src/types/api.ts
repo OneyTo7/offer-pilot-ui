@@ -147,6 +147,7 @@ export interface ReportVO {
   position_title: string
   status: number
   content?: ReportContent
+  error_message?: string
   created_at: string
   updated_at?: string
 }
@@ -180,7 +181,7 @@ export interface AnalysisData {
   }
   skill_analysis: {
     matched: SkillItem[]
-    partial: SkillItem[]
+    partial: PartialSkillItem[]
     missing: MissingSkillItem[]
   }
   project_analysis: ProjectAnalysisItem[]
@@ -212,6 +213,14 @@ export interface SkillItem {
   level: string
   relevance: string
   assessment: string
+}
+
+export interface PartialSkillItem {
+  name: string
+  level: string
+  priority: string
+  gap: string
+  suggestion: string
 }
 
 export interface MissingSkillItem {
@@ -301,4 +310,12 @@ export interface KnowledgeDocumentDetailVO extends KnowledgeDocumentVO {
   file_url?: string
   chunk_count?: number
   fail_reason?: string
+}
+
+/** 知识库文档分片（来自 pgvector vector_store） */
+export interface KnowledgeChunkVO {
+  id: string
+  index?: number | null
+  content: string
+  metadata?: Record<string, unknown>
 }

@@ -195,9 +195,9 @@ function statusLabel(status: number) {
 .resume-detail {
   max-width: 800px;
   margin: 0 auto;
-  padding: 24px 16px 48px;
-  font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
-  color: #1e293b;
+  padding: 0;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
   min-height: 60vh;
 }
 
@@ -212,13 +212,13 @@ function statusLabel(status: number) {
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #e2e8f0;
-  border-top-color: #6366f1;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { color: #64748b; font-size: 14px; }
+.loading-text { color: var(--color-text-muted); font-size: 14px; }
 
 /* ===== Back button ===== */
 .back-btn {
@@ -226,10 +226,10 @@ function statusLabel(status: number) {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  color: #475569;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
@@ -237,9 +237,9 @@ function statusLabel(status: number) {
   margin-bottom: 20px;
 }
 .back-btn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #1e293b;
+  background: var(--color-bg-subtle);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
 }
 
 /* ===== Resume header ===== */
@@ -253,10 +253,10 @@ function statusLabel(status: number) {
   margin-bottom: 8px;
 }
 .resume-name {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 22px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0;
 }
 .status-tag {
@@ -265,9 +265,9 @@ function statusLabel(status: number) {
   padding: 2px 10px;
   border-radius: 20px;
 }
-.status-parsing { background: #fef3c7; color: #b45309; }
-.status-done { background: #d1fae5; color: #065f46; }
-.status-failed { background: #fee2e2; color: #b91c1c; }
+.status-parsing { background: var(--color-warning-bg); color: #b45309; }
+.status-done { background: var(--color-success-bg); color: #065f46; }
+.status-failed { background: var(--color-danger-bg); color: #b91c1c; }
 
 .resume-header-meta {
   display: flex;
@@ -279,27 +279,27 @@ function statusLabel(status: number) {
   align-items: center;
   gap: 4px;
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
-.meta-item svg { stroke: #94a3b8; flex-shrink: 0; }
+.meta-item svg { stroke: var(--color-border); flex-shrink: 0; }
 
 /* ===== Sections ===== */
 .section {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   padding: 24px 28px;
   margin-bottom: 16px;
-  box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-card);
 }
 .section-title {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 16px;
   font-weight: 600;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 16px;
   padding-bottom: 10px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
 }
 
 /* ===== Info Grid ===== */
@@ -307,9 +307,9 @@ function statusLabel(status: number) {
   display: grid;
   grid-template-columns: repeat(2, 1fr);
   gap: 2px;
-  background: #f1f5f9;
-  border: 1px solid #f1f5f9;
-  border-radius: 10px;
+  background: var(--color-border-light);
+  border: 1px solid var(--color-border-light);
+  border-radius: var(--radius-md);
   overflow: hidden;
 }
 .info-item {
@@ -317,21 +317,21 @@ function statusLabel(status: number) {
   flex-direction: column;
   gap: 2px;
   padding: 12px 16px;
-  background: #fff;
+  background: var(--color-bg-card);
 }
 .info-item:nth-child(odd):last-child {
   grid-column: 1 / -1;
 }
 .info-label {
   font-size: 11px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   font-weight: 500;
   text-transform: uppercase;
   letter-spacing: 0.04em;
 }
 .info-value {
   font-size: 14px;
-  color: #1e293b;
+  color: var(--color-text-primary);
 }
 
 /* ===== Timeline ===== */
@@ -346,7 +346,7 @@ function statusLabel(status: number) {
   top: 4px;
   bottom: 4px;
   width: 2px;
-  background: #e2e8f0;
+  background: var(--color-border);
 }
 .timeline-item {
   position: relative;
@@ -360,8 +360,8 @@ function statusLabel(status: number) {
   width: 10px;
   height: 10px;
   border-radius: 50%;
-  background: #6366f1;
-  border: 2px solid #eef2ff;
+  background: var(--color-primary);
+  border: 2px solid var(--color-primary-light);
   z-index: 1;
 }
 .timeline-content {
@@ -372,32 +372,32 @@ function statusLabel(status: number) {
 }
 .timeline-date {
   font-size: 12px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 .timeline-title {
   font-size: 14px;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 4px;
   line-height: 1.6;
 }
 .timeline-sub {
   font-size: 13px;
-  color: #64748b;
+  color: var(--color-text-muted);
 }
 .timeline-desc {
   font-size: 13px;
-  color: #475569;
+  color: var(--color-text-secondary);
   margin: 4px 0;
   line-height: 1.7;
 }
 .desc-label {
   font-weight: 500;
-  color: #6366f1;
+  color: var(--color-primary);
 }
 .timeline-highlight {
   padding: 6px 10px;
   background: #faf5ff;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   border-left: 2px solid #a855f7;
 }
 .timeline-tags {
@@ -422,8 +422,8 @@ function statusLabel(status: number) {
   font-weight: 500;
   line-height: 1.5;
 }
-.tag-indigo { background: #eef2ff; color: #4f46e5; }
-.tag-emerald { background: #ecfdf5; color: #059669; }
+.tag-indigo { background: var(--color-primary-light); color: var(--color-primary); }
+.tag-emerald { background: var(--color-success-bg); color: var(--color-success); }
 
 /* ===== Skills ===== */
 .skills-section {
@@ -440,7 +440,7 @@ function statusLabel(status: number) {
   flex-shrink: 0;
   font-size: 13px;
   font-weight: 600;
-  color: #475569;
+  color: var(--color-text-secondary);
   min-width: 64px;
   padding-top: 2px;
 }
@@ -454,7 +454,7 @@ function statusLabel(status: number) {
 .summary-body {
   font-size: 14px;
   line-height: 1.9;
-  color: #334155;
+  color: var(--color-text-secondary);
   white-space: pre-wrap;
   padding: 4px 0;
 }

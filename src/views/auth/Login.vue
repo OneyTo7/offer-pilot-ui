@@ -2,7 +2,6 @@
   <div class="login-container">
     <el-card class="login-card" shadow="always">
       <h2 class="login-title">面壁 OfferPilot</h2>
-      <p class="login-subtitle">AI 简历智能平台</p>
       <el-form ref="formRef" :model="form" :rules="rules" @keyup.enter="handleLogin">
         <el-form-item prop="email">
           <el-input v-model="form.email" placeholder="邮箱" prefix-icon="Message" />
@@ -21,11 +20,11 @@
       </div>
     </el-card>
     <div class="login-community">
-      <span>🔒 数据加密 · 用户隔离</span>
-      <span class="sep">|</span>
-      <a href="https://github.com/lidaoqi/offer-pilot" target="_blank">⭐ GitHub</a>
-      <span class="sep">|</span>
-      <span>📱 加群：lidaoqi_dev</span>
+      <span class="community-item">🔒 数据加密 · 用户隔离</span>
+      <span class="community-sep">|</span>
+      <a class="community-item" href="https://github.com/lidaoqi/offer-pilot" target="_blank">⭐ GitHub</a>
+      <span class="community-sep">|</span>
+      <span class="community-item">📱 加群：lidaoqi_dev</span>
     </div>
   </div>
 </template>
@@ -71,44 +70,53 @@ async function handleLogin() {
 .login-container {
   height: 100vh;
   display: flex;
+  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1e293b 100%);
 }
 .login-card {
   width: 400px;
+  border-radius: var(--radius-xl);
+  margin: auto;
 }
 .login-title {
   text-align: center;
   margin-bottom: 0;
-}
-.login-subtitle {
-  text-align: center;
-  color: #999;
-  margin-bottom: 24px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--color-text-primary);
 }
 .login-btn {
   width: 100%;
 }
 .login-footer {
   text-align: center;
-  color: #666;
-}
-.login-community {
-  margin-top: 16px;
-  text-align: center;
-  color: rgba(255, 255, 255, 0.7);
+  color: var(--color-text-secondary);
   font-size: 13px;
 }
-.login-community .sep {
-  margin: 0 8px;
-  opacity: 0.4;
+.login-footer a {
+  color: var(--color-primary);
 }
-.login-community a {
+.login-community {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 24px 32px;
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 13px;
+  flex-wrap: wrap;
+}
+.login-community .community-sep {
+  opacity: 0.4;
+  color: rgba(255, 255, 255, 0.4);
+}
+.login-community .community-item {
   color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
 }
-.login-community a:hover {
+.login-community a.community-item:hover {
   text-decoration: underline;
   color: #fff;
 }

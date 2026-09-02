@@ -1,45 +1,52 @@
 <template>
-  <div class="report-list">
-    <div class="page-header">
-      <h2>评估报告</h2>
+  <PageContainer title="评估报告" subtitle="AI 自动生成的简历与岗位匹配度分析报告">
+    <template #action>
       <el-button type="primary" @click="showDialog = true">
-        <el-icon><Plus /></el-icon> 生成报告
+        <el-icon><Plus /></el-icon>
+        生成报告
       </el-button>
-    </div>
+    </template>
 
-    <el-table :data="reports" v-loading="loading" stripe>
-      <el-table-column prop="id" label="ID" width="80" />
-      <el-table-column prop="resume_name" label="简历" min-width="150" show-overflow-tooltip />
+    <el-table :data="reports" v-loading="loading" @row-click="handleRowClick">
+      <el-table-column prop="id" label="编号" width="80" align="center" />
+      <el-table-column prop="resume_name" label="简历" min-width="160" show-overflow-tooltip />
       <el-table-column prop="position_title" label="目标职位" min-width="180" show-overflow-tooltip />
-      <el-table-column label="匹配度" width="120">
+      <el-table-column label="匹配度" width="120" align="center">
         <template #default="{ row }">
-          <el-tag v-if="row.content?.match_score" :type="scoreType(row.content.match_score)">
+          <el-tag
+            v-if="row.content?.match_score"
+            :type="scoreType(row.content.match_score)"
+            size="small"
+          >
             {{ row.content.match_score }}%
           </el-tag>
-          <span v-else>-</span>
+          <span v-else class="text-muted">-</span>
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="120">
+      <el-table-column label="状态" width="120" align="center">
         <template #default="{ row }">
-          <el-tag :type="row.status === 0 ? 'warning' : row.status === 2 ? 'danger' : 'success'">
-            {{ row.status === 0 ? '生成中' : row.status === 2 ? '生成失败' : '已完成' }}
+          <el-tag :type="row.status === 0 ? 'warning' : row.status === 2 ? 'danger' : 'success'" size="small">
+            {{ row.status === 0 ? '生成中' : row.status === 2 ? '失败' : '已完成' }}
           </el-tag>
         </template>
       </el-table-column>
       <el-table-column prop="created_at" label="生成时间" width="180" />
-      <el-table-column label="操作" width="150" fixed="right">
+      <el-table-column label="操作" min-width="160" fixed="right">
         <template #default="{ row }">
-          <el-button size="small" @click="$router.push(`/reports/${row.id}`)">查看</el-button>
-          <el-popconfirm title="确定删除？" @confirm="handleDelete(row.id)">
-            <template #reference>
-              <el-button size="small" type="danger">删除</el-button>
-            </template>
-          </el-popconfirm>
+          <div class="action-btns">
+            <el-button size="small" @click.stop="handleView(row.id)">查看</el-button>
+            <el-popconfirm title="确定删除？" @confirm="handleDelete(row.id)">
+              <template #reference>
+                <el-button size="small" text type="danger" @click.stop>删除</el-button>
+              </template>
+            </el-popconfirm>
+          </div>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="showDialog" title="生成评估报告" width="500px">
+    <!-- 生成报告对话框 -->
+    <el-dialog v-model="showDialog" title="生成评估报告" width="500px" :close-on-click-modal="false">
       <el-form label-width="80px">
         <el-form-item label="简历">
           <el-select v-model="form.resume_id" placeholder="选择简历" style="width: 100%">
@@ -57,17 +64,20 @@
         <el-button type="primary" :loading="submitting" @click="handleCreate">生成</el-button>
       </template>
     </el-dialog>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
 import { getReportList, createReport, deleteReport } from '../../api/report'
 import { getResumeList } from '../../api/resume'
 import { getPositionList } from '../../api/position'
 import type { ReportVO, ResumeVO, PositionVO } from '../../types/api'
+import PageContainer from '../../components/PageContainer.vue'
 
+const router = useRouter()
 const reports = ref<ReportVO[]>([])
 const loading = ref(false)
 const showDialog = ref(false)
@@ -82,7 +92,7 @@ onMounted(() => {
     resumeList.value = r.data.data
     positionList.value = p.data.data
   }).catch(() => {
-    // Resume/position list loading is non-critical; the create dialog will show empty options
+    // 非关键数据，对话框会显示空选项
   })
 })
 
@@ -122,6 +132,14 @@ async function handleDelete(id: number) {
   }
 }
 
+function handleView(id: number) {
+  router.push(`/reports/${id}`)
+}
+
+function handleRowClick(row: ReportVO) {
+  handleView(row.id)
+}
+
 function scoreType(score: number) {
   if (score >= 80) return 'success'
   if (score >= 60) return 'warning'
@@ -130,10 +148,7 @@ function scoreType(score: number) {
 </script>
 
 <style scoped>
-.page-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+.text-muted {
+  color: var(--color-text-muted);
 }
 </style>

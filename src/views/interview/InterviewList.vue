@@ -1,27 +1,35 @@
 <template>
-  <div class="interview-list">
-    <div class="page-header">
-      <h2>模拟面试</h2>
+  <PageContainer title="模拟面试" subtitle="三面制 AI 模拟面试，帮你查漏补缺">
+    <template #action>
       <el-button type="primary" @click="showDialog = true">
-        <el-icon><Plus /></el-icon> 开始面试
+        <el-icon><Plus /></el-icon>
+        开始面试
       </el-button>
-    </div>
+    </template>
 
-    <el-table :data="sessions" v-loading="loading" stripe>
-      <el-table-column prop="id" label="ID" width="80" />
-      <el-table-column label="轮次" width="120">
+    <el-table :data="sessions" v-loading="loading" @row-click="handleRowClick">
+      <el-table-column prop="id" label="编号" width="80" align="center" />
+      <el-table-column label="轮次" width="100" align="center">
         <template #default="{ row }">
-          第 {{ row.current_round }} 轮
+          <span>第 {{ row.current_round }} 轮</span>
         </template>
       </el-table-column>
-      <el-table-column label="进度" width="200">
+      <el-table-column label="进度" width="160">
         <template #default="{ row }">
-          第 {{ row.current_question }} / 10 题
+          <div class="progress-cell">
+            <span>第 {{ row.current_question }} / 10 题</span>
+            <el-progress
+              :percentage="Math.round((row.current_question / 10) * 100)"
+              :stroke-width="4"
+              :show-text="false"
+              color="var(--color-primary)"
+            />
+          </div>
         </template>
       </el-table-column>
-      <el-table-column prop="status" label="状态" width="120">
+      <el-table-column label="状态" width="120" align="center">
         <template #default="{ row }">
-          <el-tag :type="statusType(row.status)">
+          <el-tag :type="statusType(row.status)" size="small">
             {{ statusLabel(row.status) }}
           </el-tag>
         </template>
@@ -29,18 +37,21 @@
       <el-table-column prop="created_at" label="开始时间" width="180" />
       <el-table-column label="操作" width="150" fixed="right">
         <template #default="{ row }">
-          <el-button
-            size="small"
-            :type="row.status === 0 ? 'success' : 'default'"
-            @click="$router.push(`/interviews/${row.id}`)"
-          >
-            {{ row.status === 0 ? '继续' : '查看' }}
-          </el-button>
+          <div class="action-btns">
+            <el-button
+              size="small"
+              :type="row.status === 0 ? 'primary' : 'default'"
+              @click.stop="handleView(row.id)"
+            >
+              {{ row.status === 0 ? '继续' : '查看' }}
+            </el-button>
+          </div>
         </template>
       </el-table-column>
     </el-table>
 
-    <el-dialog v-model="showDialog" title="开始模拟面试" width="500px">
+    <!-- 开始面试对话框 -->
+    <el-dialog v-model="showDialog" title="开始模拟面试" width="500px" :close-on-click-modal="false">
       <el-form label-width="80px">
         <el-form-item label="简历">
           <el-select v-model="form.resume_id" placeholder="选择简历" style="width: 100%">
@@ -58,7 +69,7 @@
         <el-button type="primary" :loading="submitting" @click="handleCreate">开始</el-button>
       </template>
     </el-dialog>
-  </div>
+  </PageContainer>
 </template>
 
 <script setup lang="ts">
@@ -69,6 +80,7 @@ import { getInterviewList, createInterview } from '../../api/interview'
 import { getResumeList } from '../../api/resume'
 import { getPositionList } from '../../api/position'
 import type { SessionVO, ResumeVO, PositionVO } from '../../types/api'
+import PageContainer from '../../components/PageContainer.vue'
 
 const router = useRouter()
 const sessions = ref<SessionVO[]>([])
@@ -85,7 +97,7 @@ onMounted(() => {
     resumeList.value = r.data.data
     positionList.value = p.data.data
   }).catch(() => {
-    // Resume/position list loading is non-critical; the create dialog will show empty options
+    // 非关键数据
   })
 })
 
@@ -115,19 +127,28 @@ async function handleCreate() {
   }
 }
 
+function handleView(id: number) {
+  router.push(`/interviews/${id}`)
+}
+
+function handleRowClick(row: SessionVO) {
+  handleView(row.id)
+}
+
 function statusType(status: number) {
   return status === 0 ? 'success' : status === 1 ? 'info' : 'danger'
 }
+
 function statusLabel(status: number) {
   return status === 0 ? '进行中' : status === 1 ? '已完成' : '已结束'
 }
 </script>
 
 <style scoped>
-.page-header {
+.progress-cell {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  margin-bottom: 20px;
+  flex-direction: column;
+  gap: 4px;
+  padding: 4px 0;
 }
 </style>

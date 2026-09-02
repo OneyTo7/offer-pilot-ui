@@ -73,6 +73,11 @@ const router = createRouter({
           component: () => import('../views/knowledge/KnowledgeList.vue'),
         },
         {
+          path: 'knowledge/:id/chunks',
+          name: 'KnowledgeChunks',
+          component: () => import('../views/knowledge/KnowledgeChunks.vue'),
+        },
+        {
           path: 'settings',
           name: 'Settings',
           component: () => import('../views/settings/Settings.vue'),

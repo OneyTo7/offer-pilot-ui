@@ -83,20 +83,28 @@ async function handleRegister() {
   display: flex;
   align-items: center;
   justify-content: center;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--color-primary) 0%, #1e293b 100%);
 }
 .register-card {
   width: 400px;
+  border-radius: var(--radius-xl);
 }
 .register-title {
   text-align: center;
   margin-bottom: 24px;
+  font-family: var(--font-display);
+  font-size: 24px;
+  color: var(--color-text-primary);
 }
 .register-btn {
   width: 100%;
 }
 .register-footer {
   text-align: center;
-  color: #666;
+  color: var(--color-text-secondary);
+  font-size: 13px;
+}
+.register-footer a {
+  color: var(--color-primary);
 }
 </style>

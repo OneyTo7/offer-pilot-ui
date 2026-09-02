@@ -481,9 +481,9 @@ function matchLevelClass(match: string) {
 .report-detail {
   max-width: 860px;
   margin: 0 auto;
-  padding: 24px 16px 64px;
-  font-family: 'Inter', 'Noto Sans SC', -apple-system, sans-serif;
-  color: #1e293b;
+  padding: 0;
+  font-family: var(--font-body);
+  color: var(--color-text-primary);
   min-height: 60vh;
 }
 
@@ -498,13 +498,13 @@ function matchLevelClass(match: string) {
 .loading-spinner {
   width: 32px;
   height: 32px;
-  border: 3px solid #e2e8f0;
-  border-top-color: #6366f1;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
 @keyframes spin { to { transform: rotate(360deg); } }
-.loading-text { color: #64748b; font-size: 14px; }
+.loading-text { color: var(--color-text-muted); font-size: 14px; }
 
 /* ===== Back button ===== */
 .back-btn {
@@ -512,10 +512,10 @@ function matchLevelClass(match: string) {
   align-items: center;
   gap: 6px;
   padding: 6px 14px;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  background: #fff;
-  color: #475569;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-bg-card);
+  color: var(--color-text-secondary);
   font-size: 13px;
   font-family: inherit;
   cursor: pointer;
@@ -523,9 +523,9 @@ function matchLevelClass(match: string) {
   margin-bottom: 20px;
 }
 .back-btn:hover {
-  background: #f8fafc;
-  border-color: #cbd5e1;
-  color: #1e293b;
+  background: var(--color-bg-subtle);
+  border-color: var(--color-border);
+  color: var(--color-text-primary);
 }
 
 /* ===== Report header ===== */
@@ -539,20 +539,20 @@ function matchLevelClass(match: string) {
 .report-badge {
   display: inline-block;
   padding: 4px 14px;
-  background: linear-gradient(135deg, #1e40af, #1d4ed8);
+  background: linear-gradient(135deg, var(--color-primary), var(--color-primary-hover));
   color: #fff;
   font-size: 13px;
   font-weight: 600;
-  border-radius: 6px;
+  border-radius: var(--radius-sm);
   letter-spacing: 0.5px;
   margin-bottom: 8px;
 }
 .report-meta {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
   margin: 0;
 }
-.meta-sep { margin: 0 6px; color: #e2e8f0; }
+.meta-sep { margin: 0 6px; color: var(--color-border); }
 
 /* ===== Status cards ===== */
 .status-card {
@@ -561,32 +561,32 @@ function matchLevelClass(match: string) {
   align-items: center;
   gap: 12px;
   padding: 48px 24px;
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 14px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-lg);
   text-align: center;
 }
-.status-card.generating { color: #6366f1; }
-.status-card.failed { color: #ef4444; }
+.status-card.generating { color: var(--color-primary); }
+.status-card.failed { color: var(--color-danger); }
 .status-spinner {
   width: 28px;
   height: 28px;
-  border: 3px solid #e2e8f0;
-  border-top-color: #6366f1;
+  border: 3px solid var(--color-border);
+  border-top-color: var(--color-primary);
   border-radius: 50%;
   animation: spin 0.8s linear infinite;
 }
-.status-text { font-size: 14px; margin: 0; color: #64748b; }
-.status-detail { font-size: 13px; color: #94a3b8; margin: 0; }
+.status-text { font-size: 14px; margin: 0; color: var(--color-text-muted); }
+.status-detail { font-size: 13px; color: var(--color-text-muted); margin: 0; }
 
 /* ===== Score Section ===== */
 .score-section {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   padding: 32px;
   margin-bottom: 20px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-card);
 }
 .score-main {
   display: flex;
@@ -610,14 +610,14 @@ function matchLevelClass(match: string) {
   position: absolute;
   inset: 4px;
   border-radius: 50%;
-  background: #fff;
+  background: var(--color-bg-card);
 }
 .score-value {
   position: relative;
   z-index: 1;
   font-size: 36px;
   font-weight: 700;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-mono);
 }
 .score-label {
   position: relative;
@@ -626,9 +626,9 @@ function matchLevelClass(match: string) {
   margin-top: 2px;
   opacity: 0.8;
 }
-.score-high { background: conic-gradient(#059669 0deg, #059669 288deg, #e2e8f0 288deg); color: #059669; }
-.score-mid { background: conic-gradient(#6366f1 0deg, #6366f1 216deg, #e2e8f0 216deg); color: #4f46e5; }
-.score-low { background: conic-gradient(#dc2626 0deg, #dc2626 144deg, #e2e8f0 144deg); color: #dc2626; }
+.score-high { background: conic-gradient(#059669 0deg, #059669 288deg, var(--color-border) 288deg); color: #059669; }
+.score-mid { background: conic-gradient(var(--color-primary) 0deg, var(--color-primary) 216deg, var(--color-border) 216deg); color: var(--color-primary); }
+.score-low { background: conic-gradient(var(--color-danger) 0deg, var(--color-danger) 144deg, var(--color-border) 144deg); color: var(--color-danger); }
 
 .score-breakdown {
   flex: 1;
@@ -654,14 +654,14 @@ function matchLevelClass(match: string) {
 .breakdown-value {
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Inter', sans-serif;
+  font-family: var(--font-mono);
 }
-.breakdown-value.bv-high { color: #059669; }
-.breakdown-value.bv-mid { color: #4f46e5; }
-.breakdown-value.bv-low { color: #dc2626; }
+.breakdown-value.bv-high { color: var(--color-success); }
+.breakdown-value.bv-mid { color: var(--color-primary); }
+.breakdown-value.bv-low { color: var(--color-danger); }
 .breakdown-bar {
   height: 6px;
-  background: #f1f5f9;
+  background: var(--color-border-light);
   border-radius: 3px;
   overflow: hidden;
 }
@@ -673,28 +673,28 @@ function matchLevelClass(match: string) {
 
 /* ===== Sections ===== */
 .section {
-  background: #fff;
-  border: 1px solid #e2e8f0;
-  border-radius: 16px;
+  background: var(--color-bg-card);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-xl);
   padding: 28px 32px;
   margin-bottom: 16px;
-  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  box-shadow: var(--shadow-card);
 }
 .section-header {
   margin-bottom: 20px;
   padding-bottom: 14px;
-  border-bottom: 1px solid #f1f5f9;
+  border-bottom: 1px solid var(--color-border-light);
 }
 .section-title {
-  font-family: 'Noto Serif SC', serif;
+  font-family: var(--font-display);
   font-size: 17px;
   font-weight: 700;
-  color: #0f172a;
+  color: var(--color-text-primary);
   margin: 0 0 4px;
 }
 .section-desc {
   font-size: 13px;
-  color: #94a3b8;
+  color: var(--color-text-muted);
 }
 
 /* ===== Skill Analysis ===== */
@@ -708,7 +708,7 @@ function matchLevelClass(match: string) {
   gap: 8px;
   font-size: 14px;
   font-weight: 600;
-  color: #334155;
+  color: var(--color-text-primary);
   margin: 0 0 12px;
 }
 .skill-group-icon {
@@ -1224,7 +1224,7 @@ function matchLevelClass(match: string) {
 
 /* ===== Responsive ===== */
 @media (max-width: 640px) {
-  .report-detail { padding: 16px 12px 32px; }
+  .report-detail { padding: 0; }
   .report-header { flex-direction: column; align-items: flex-start; }
   .section { padding: 20px 16px; }
   .score-main { flex-direction: column; align-items: center; gap: 24px; }
