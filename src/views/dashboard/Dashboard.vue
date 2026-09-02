@@ -167,15 +167,15 @@
           <div class="info-list">
             <div class="info-item">
               <el-icon class="icon-star"><Star /></el-icon>
-              <a href="https://github.com/lidaoqi/offer-pilot" target="_blank" class="community-link">GitHub 给个 Star ⭐</a>
+              <a href="https://github.com/OneyTo7/offer-pilot" target="_blank" class="community-link">GitHub 给个 Star ⭐</a>
             </div>
             <div class="info-item">
               <el-icon class="icon-wechat"><ChatDotSquare /></el-icon>
-              <span>扫码加群：<el-tag size="small">lidaoqi_dev</el-tag>（作者微信）</span>
+              <span>加作者微信：<el-tag size="small">Gonnatobeme</el-tag>（拉你进群）</span>
             </div>
             <div class="info-item">
               <el-icon class="icon-mit"><Reading /></el-icon>
-              <span>本项目基于 <a href="https://github.com/lidaoqi/offer-pilot/blob/main/LICENSE" target="_blank">MIT 协议</a> 开源</span>
+              <span>本项目基于 <a href="https://github.com/OneyTo7/offer-pilot/blob/main/LICENSE" target="_blank">MIT 协议</a> 开源</span>
             </div>
           </div>
         </el-card>

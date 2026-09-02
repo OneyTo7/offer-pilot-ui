@@ -22,9 +22,9 @@
     <div class="login-community">
       <span class="community-item">🔒 数据加密 · 用户隔离</span>
       <span class="community-sep">|</span>
-      <a class="community-item" href="https://github.com/lidaoqi/offer-pilot" target="_blank">⭐ GitHub</a>
+      <a class="community-item" href="https://github.com/OneyTo7/offer-pilot" target="_blank">⭐ GitHub</a>
       <span class="community-sep">|</span>
-      <span class="community-item">📱 加群：lidaoqi_dev</span>
+      <span class="community-item">📱 加作者：Gonnatobeme</span>
     </div>
   </div>
 </template>

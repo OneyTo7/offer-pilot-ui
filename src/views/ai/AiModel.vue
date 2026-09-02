@@ -244,14 +244,14 @@
               <div class="community-title">作者微信</div>
               <div class="community-desc">添加作者微信，反馈问题或咨询合作</div>
             </div>
-            <el-tag size="small" type="warning" effect="plain">{{ info?.community.author_wechat || 'lidaoqi_dev' }}</el-tag>
+            <el-tag size="small" type="warning" effect="plain">{{ info?.community.author_wechat || 'Gonnatobeme' }}</el-tag>
           </div>
         </div>
       </div>
     </section>
 
     <!-- 微信群二维码弹窗 -->
-    <el-dialog v-model="showQrCode" title="扫码加入微信群" width="360px" align-center>
+    <el-dialog v-model="showQrCode" title="扫码添加作者微信" width="360px" align-center>
       <div class="qr-code">
         <el-image
           :src="info?.community.wechat_qr_url || ''"
@@ -262,7 +262,7 @@
             <div class="qr-placeholder">
               <el-icon :size="48"><Picture /></el-icon>
               <p>二维码加载中...</p>
-              <p class="qr-hint">或添加作者微信：{{ info?.community.author_wechat || 'lidaoqi_dev' }}</p>
+              <p class="qr-hint">或添加作者微信：{{ info?.community.author_wechat || 'Gonnatobeme' }}</p>
             </div>
           </template>
         </el-image>
@@ -326,7 +326,7 @@ async function handleClearKey() {
 }
 
 function openGithub() {
-  window.open(info.value?.community.github_url || 'https://github.com/lidaoqi/offer-pilot', '_blank')
+  window.open(info.value?.community.github_url || 'https://github.com/OneyTo7/offer-pilot', '_blank')
 }
 
 const dailyData = computed(() => {
