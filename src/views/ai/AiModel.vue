@@ -230,21 +230,13 @@
           <div class="community-item">
             <el-icon class="community-icon" color="#059669"><ChatLineSquare /></el-icon>
             <div class="community-text">
-              <div class="community-title">微信群</div>
-              <div class="community-desc">扫码加入微信群，交流面试经验、获取更新提醒</div>
+              <div class="community-title">作者微信</div>
+              <div class="community-desc">添加作者微信，拉你进交流群、反馈问题</div>
             </div>
             <el-button size="small" @click="showQrCode = true">
               <el-icon><Picture /></el-icon> 二维码
             </el-button>
-          </div>
-
-          <div class="community-item">
-            <el-icon class="community-icon" color="#d97706"><User /></el-icon>
-            <div class="community-text">
-              <div class="community-title">作者微信</div>
-              <div class="community-desc">添加作者微信，反馈问题或咨询合作</div>
-            </div>
-            <el-tag size="small" type="warning" effect="plain">{{ info?.community.author_wechat || 'Gonnatobeme' }}</el-tag>
+            <el-tag size="small" type="warning" effect="plain" style="margin-left: 8px;">{{ info?.community.author_wechat || 'Gonnatobeme' }}</el-tag>
           </div>
         </div>
       </div>

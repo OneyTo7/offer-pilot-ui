@@ -5,6 +5,7 @@ export function createKnowledge(data: {
   title: string
   content_type: string
   content?: string
+  scope?: string
 }) {
   return request.post<ApiResult<KnowledgeDocumentVO>>('/knowledge', data)
 }
@@ -15,6 +16,10 @@ export function uploadKnowledge(formData: FormData) {
 
 export function getKnowledgeList() {
   return request.get<ApiResult<KnowledgeDocumentVO[]>>('/knowledge')
+}
+
+export function getSystemKnowledgeList() {
+  return request.get<ApiResult<KnowledgeDocumentVO[]>>('/knowledge/system')
 }
 
 export function getKnowledgeDetail(id: number) {

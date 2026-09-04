@@ -22,6 +22,8 @@ export interface UserVO {
   avatar?: string
   /** 用户是否已配置自己的 DeepSeek API Key */
   has_api_key?: boolean
+  /** 用户角色：user=普通用户, admin=管理员 */
+  role?: string
   created_at: string
 }
 
@@ -268,6 +270,7 @@ export interface KnowledgeDocumentVO {
   title: string
   content_type: string
   status: number
+  scope?: string
   created_at: string
 }
 
@@ -318,4 +321,19 @@ export interface KnowledgeChunkVO {
   index?: number | null
   content: string
   metadata?: Record<string, unknown>
+}
+
+/** AI 小助手 - 对话 */
+export interface ConversationVO {
+  id: number
+  title: string
+  created_at: string
+  updated_at: string
+}
+
+/** AI 小助手 - 消息 */
+export interface MessageVO {
+  role: string       // "user" | "assistant"
+  content: string
+  created_at: string
 }

@@ -7,12 +7,25 @@
       </el-button>
     </template>
 
+    <!-- 知识库分类 Tab -->
+    <el-tabs v-model="activeTab" class="knowledge-tabs" @tab-change="onTabChange">
+      <el-tab-pane label="我的知识库" name="user" />
+      <el-tab-pane v-if="isAdmin" label="系统知识库" name="system" />
+    </el-tabs>
+
     <el-table :data="documents" v-loading="loading" @row-click="handleRowClick">
       <el-table-column prop="title" label="标题" min-width="200" />
-      <el-table-column prop="content_type" label="类型" width="120" align="center">
+      <el-table-column prop="content_type" label="类型" width="100" align="center">
         <template #default="{ row }">
           <el-tag :type="contentTypeTag(row.content_type)" size="small">
             {{ row.content_type === 'text' ? '文本' : '文件' }}
+          </el-tag>
+        </template>
+      </el-table-column>
+      <el-table-column v-if="isAdmin" label="范围" width="100" align="center">
+        <template #default="{ row }">
+          <el-tag :type="row.scope === 'system' ? 'danger' : 'info'" size="small">
+            {{ row.scope === 'system' ? '系统' : '用户' }}
           </el-tag>
         </template>
       </el-table-column>
@@ -69,6 +82,12 @@
             <el-button>选择文件</el-button>
           </el-upload>
         </el-form-item>
+        <el-form-item v-if="isAdmin" label="范围" prop="scope">
+          <el-radio-group v-model="form.scope">
+            <el-radio value="user">用户</el-radio>
+            <el-radio value="system">系统</el-radio>
+          </el-radio-group>
+        </el-form-item>
       </el-form>
       <template #footer>
         <el-button @click="showDialog = false">取消</el-button>
@@ -79,25 +98,31 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useRouter } from 'vue-router'
 import { ElMessage } from 'element-plus'
-import { getKnowledgeList, createKnowledge, deleteKnowledge, uploadKnowledge } from '../../api/knowledge'
+import { getKnowledgeList, getSystemKnowledgeList, createKnowledge, deleteKnowledge, uploadKnowledge } from '../../api/knowledge'
 import type { KnowledgeDocumentVO } from '../../types/api'
 import type { UploadFile, UploadFiles } from 'element-plus'
 import PageContainer from '../../components/PageContainer.vue'
+import { useAuthStore } from '../../stores/auth'
 
 const router = useRouter()
+const authStore = useAuthStore()
+
+const isAdmin = computed(() => authStore.user?.role === 'admin')
 
 const documents = ref<KnowledgeDocumentVO[]>([])
 const loading = ref(false)
 const showDialog = ref(false)
 const submitting = ref(false)
+const activeTab = ref('user')
 
 const form = ref({
   title: '',
   content_type: 'text',
   content: '',
+  scope: 'user',
   file: null as File | null,
 })
 
@@ -106,15 +131,24 @@ onMounted(() => fetchList())
 async function fetchList() {
   loading.value = true
   try {
-    const res = await getKnowledgeList()
-    documents.value = res.data.data
+    if (activeTab.value === 'system') {
+      const res = await getSystemKnowledgeList()
+      documents.value = res.data.data
+    } else {
+      const res = await getKnowledgeList()
+      documents.value = res.data.data
+    }
   } finally {
     loading.value = false
   }
 }
 
+function onTabChange() {
+  fetchList()
+}
+
 async function handleCreate() {
-  // 按类型校验（文件上传标题可省略，后端会用文件名兜底）
+  // 按类型校验
   if (form.value.content_type === 'text') {
     if (!form.value.title.trim()) {
       ElMessage.warning('请输入标题')
@@ -137,12 +171,16 @@ async function handleCreate() {
       if (form.value.title.trim()) {
         fd.append('title', form.value.title.trim())
       }
+      if (isAdmin.value && form.value.scope) {
+        fd.append('scope', form.value.scope)
+      }
       await uploadKnowledge(fd)
     } else {
       await createKnowledge({
         title: form.value.title,
         content_type: form.value.content_type,
         content: form.value.content,
+        scope: isAdmin.value ? form.value.scope : undefined,
       })
     }
     ElMessage.success('添加成功')
@@ -164,7 +202,6 @@ function handleFileRemove() {
 }
 
 function handleFileExceed(files: UploadFiles) {
-  // 仅允许一个文件，超出时提示替换
   ElMessage.warning(`最多上传 1 个文件，已忽略 ${files.length} 个`)
 }
 
@@ -189,3 +226,9 @@ function contentTypeTag(type: string) {
   return type === 'text' ? 'default' : type === 'file' ? 'primary' : 'warning'
 }
 </script>
+
+<style scoped>
+.knowledge-tabs {
+  margin-bottom: 0;
+}
+</style>

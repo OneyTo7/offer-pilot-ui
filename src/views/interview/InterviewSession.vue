@@ -220,9 +220,7 @@ onMounted(async () => {
 })
 
 function renderMarkdown(text: string): string {
-  // TODO: Replace with a proper library like `marked` (markdown-it or similar)
-  // for better security and spec compliance. The current implementation is
-  // a minimal regex-based parser that assumes trusted AI output.
+  // Minimal markdown renderer for AI output (headings, bold, code, lists, links)
   if (!text) return ''
   let html = text
     .replace(/&/g, '&amp;')

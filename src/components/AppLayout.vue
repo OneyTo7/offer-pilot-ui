@@ -42,6 +42,10 @@
           <el-icon><ChatDotSquare /></el-icon>
           <template #title>模拟面试</template>
         </el-menu-item>
+        <el-menu-item index="/assistant">
+          <el-icon><ChatLineSquare /></el-icon>
+          <template #title>AI 小助手</template>
+        </el-menu-item>
         <el-menu-item index="/ai">
           <el-icon><Cpu /></el-icon>
           <template #title>大模型</template>
@@ -123,6 +127,7 @@ const breadcrumbTitle = computed(() => {
     '/positions': '目标职位',
     '/reports': '评估报告',
     '/interviews': '模拟面试',
+    '/assistant': 'AI 小助手',
     '/ai': '大模型配置',
     '/knowledge': '知识库',
     '/settings': '设置',
