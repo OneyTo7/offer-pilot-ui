@@ -296,7 +296,7 @@ async function handleSaveKey() {
   }
   savingKey.value = true
   try {
-    await updateApiKey(apiKeyInput.value.trim())
+    await updateApiKey({ api_key: apiKeyInput.value.trim() })
     ElMessage.success('API Key 保存成功！已切换至自定义 Key 模式')
     apiKeyInput.value = ''
     await fetchInfo()

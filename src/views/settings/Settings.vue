@@ -5,7 +5,7 @@
     <el-card shadow="never" class="section-card">
       <template #header>
         <div class="card-header">
-          <span>DeepSeek API Key 配置</span>
+          <span>API 配置</span>
           <el-tag v-if="hasApiKey" type="success" size="small">专业模式</el-tag>
           <el-tag v-else type="info" size="small">免费模式</el-tag>
         </div>
@@ -13,7 +13,7 @@
 
       <div class="intro-text">
         <p>
-          配置你自己的 DeepSeek API Key 后，即可解锁<strong>无限使用</strong>权限，不再受每日限额限制。
+          配置你自己的 API Key 后，即可解锁<strong>无限使用</strong>权限，不再受每日限额限制。
           你的 Key 仅用于你的请求，不会泄漏给其他用户。
         </p>
         <el-alert v-if="!hasApiKey" :closable="false" type="warning" show-icon class="tier-info">
@@ -33,12 +33,44 @@
         label-width="160px"
         class="api-key-form"
       >
-        <el-form-item label="DeepSeek API Key" prop="apiKey">
+        <el-form-item label="模型服务商" prop="provider">
+          <el-select
+            v-model="form.provider"
+            placeholder="选择服务商"
+            style="max-width: 480px"
+            @change="handleProviderChange"
+          >
+            <el-option label="DeepSeek" value="deepseek" />
+            <el-option label="通义千问 (阿里云)" value="qwen" />
+            <el-option label="GLM (智谱)" value="glm" />
+            <el-option label="自定义" value="custom" />
+          </el-select>
+        </el-form-item>
+
+        <el-form-item label="API Key" prop="apiKey">
           <el-input
             v-model="form.apiKey"
             type="password"
             show-password
-            placeholder="输入你的 DeepSeek API Key（以 sk- 开头）"
+            placeholder="输入你的 API Key"
+            clearable
+            style="max-width: 480px"
+          />
+        </el-form-item>
+
+        <el-form-item label="API Base URL" prop="apiBaseUrl">
+          <el-input
+            v-model="form.apiBaseUrl"
+            placeholder="例如 https://api.deepseek.com/v1"
+            clearable
+            style="max-width: 480px"
+          />
+        </el-form-item>
+
+        <el-form-item label="模型名称" prop="apiModel">
+          <el-input
+            v-model="form.apiModel"
+            placeholder="例如 deepseek-chat"
             clearable
             style="max-width: 480px"
           />
@@ -50,7 +82,7 @@
               保存
             </el-button>
             <el-button v-if="hasApiKey" type="danger" plain :loading="clearing" @click="handleClear">
-              清除 API Key（切换回免费模式）
+              清除配置（切换回免费模式）
             </el-button>
           </div>
         </el-form-item>
@@ -59,20 +91,40 @@
       <el-divider />
 
       <div class="how-to">
-        <h4>如何获取 DeepSeek API Key？</h4>
-        <ol>
-          <li>访问 <a href="https://platform.deepseek.com" target="_blank" rel="noopener">DeepSeek 开放平台</a> 并登录</li>
-          <li>进入「API Keys」页面，点击「创建 API Key」</li>
-          <li>复制生成的 Key（以 <code>sk-</code> 开头）并粘贴到上方输入框</li>
-          <li>点击「保存」即可启用专业模式</li>
-        </ol>
+        <h4>如何获取 API Key？</h4>
+        <el-collapse accordion>
+          <el-collapse-item title="DeepSeek" name="deepseek">
+            <ol>
+              <li>访问 <a href="https://platform.deepseek.com" target="_blank" rel="noopener">DeepSeek 开放平台</a> 并登录</li>
+              <li>进入「API Keys」页面，点击「创建 API Key」</li>
+              <li>复制生成的 Key（以 <code>sk-</code> 开头）并粘贴到上方输入框</li>
+              <li>服务商选择「DeepSeek」，点击「保存」</li>
+            </ol>
+          </el-collapse-item>
+          <el-collapse-item title="通义千问" name="qwen">
+            <ol>
+              <li>访问 <a href="https://dashscope.aliyun.com" target="_blank" rel="noopener">阿里云百炼平台</a> 并登录</li>
+              <li>进入「API-KEY 管理」页面，点击「创建 API-KEY」</li>
+              <li>复制生成的 Key 并粘贴到上方输入框</li>
+              <li>服务商选择「通义千问 (阿里云)」，点击「保存」</li>
+            </ol>
+          </el-collapse-item>
+          <el-collapse-item title="GLM (智谱)" name="glm">
+            <ol>
+              <li>访问 <a href="https://open.bigmodel.cn" target="_blank" rel="noopener">智谱开放平台</a> 并登录</li>
+              <li>进入「API Keys」页面，点击「添加 API Key」</li>
+              <li>复制生成的 Key 并粘贴到上方输入框</li>
+              <li>服务商选择「GLM (智谱)」，点击「保存」</li>
+            </ol>
+          </el-collapse-item>
+        </el-collapse>
       </div>
     </el-card>
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
+import { ref, computed, onMounted, watch } from 'vue'
 import { ElMessage, ElMessageBox } from 'element-plus'
 import { useAuthStore } from '../../stores/auth'
 import { updateApiKey, clearApiKey as clearApiKeyApi } from '../../api/auth'
@@ -81,20 +133,48 @@ import type { FormInstance, FormRules } from 'element-plus'
 const DAILY_REPORT_LIMIT = 3
 const DAILY_INTERVIEW_LIMIT = 1
 
+interface ProviderPreset {
+  apiBaseUrl: string
+  apiModel: string
+}
+
+const PROVIDER_PRESETS: Record<string, ProviderPreset> = {
+  deepseek: {
+    apiBaseUrl: 'https://api.deepseek.com/v1',
+    apiModel: 'deepseek-chat',
+  },
+  qwen: {
+    apiBaseUrl: 'https://dashscope.aliyuncs.com/compatible-mode/v1',
+    apiModel: 'qwen-plus',
+  },
+  glm: {
+    apiBaseUrl: 'https://open.bigmodel.cn/api/paas/v4',
+    apiModel: 'glm-4-plus',
+  },
+}
+
 const authStore = useAuthStore()
 const formRef = ref<FormInstance>()
 const saving = ref(false)
 const clearing = ref(false)
 
 const form = ref({
+  provider: 'deepseek' as string,
   apiKey: '',
+  apiBaseUrl: '',
+  apiModel: '',
 })
 
 const rules: FormRules = {
   apiKey: [
-    { required: true, message: '请输入 DeepSeek API Key', trigger: 'blur' },
-    { pattern: /^sk-/, message: 'API Key 应以 sk- 开头', trigger: 'blur' },
+    { required: true, message: '请输入 API Key', trigger: 'blur' },
     { max: 255, message: 'API Key 长度不能超过 255 个字符', trigger: 'blur' },
+  ],
+  apiBaseUrl: [
+    { max: 255, message: 'Base URL 长度不能超过 255 个字符', trigger: 'blur' },
+  ],
+  apiModel: [
+    { max: 100, message: '模型名称长度不能超过 100 个字符', trigger: 'blur' },
   ],
 }
 
@@ -102,15 +182,37 @@ const hasApiKey = computed(() => {
   return !!authStore.user?.has_api_key
 })
 
+function detectProvider(baseUrl?: string, model?: string): string {
+  if (!baseUrl && !model) return 'deepseek'
+  for (const [key, preset] of Object.entries(PROVIDER_PRESETS)) {
+    if (baseUrl === preset.apiBaseUrl && model === preset.apiModel) {
+      return key
+    }
+  }
+  return 'custom'
+}
+
+function handleProviderChange(provider: string) {
+  const preset = PROVIDER_PRESETS[provider]
+  if (preset) {
+    form.value.apiBaseUrl = preset.apiBaseUrl
+    form.value.apiModel = preset.apiModel
+  }
+}
+
 function handleSave() {
   formRef.value?.validate(async (valid: boolean) => {
     if (!valid) return
 
     saving.value = true
     try {
-      await updateApiKey(form.value.apiKey)
+      await updateApiKey({
+        api_key: form.value.apiKey,
+        api_base_url: form.value.apiBaseUrl || undefined,
+        api_model: form.value.apiModel || undefined,
+      })
       await authStore.fetchUserInfo()
-      ElMessage.success('API Key 保存成功，已启用专业模式')
+      ElMessage.success('API 配置保存成功，已启用专业模式')
       form.value.apiKey = ''
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : '保存失败'
@@ -122,7 +224,7 @@ function handleSave() {
 }
 
 function handleClear() {
-  ElMessageBox.confirm('清除 API Key 后将切换回免费模式，每日报告和面试次数将受限制。确定继续？', '确认清除', {
+  ElMessageBox.confirm('清除 API 配置后将切换回免费模式，每日报告和面试次数将受限制。确定继续？', '确认清除', {
     confirmButtonText: '确定',
     cancelButtonText: '取消',
     type: 'warning',
@@ -131,8 +233,11 @@ function handleClear() {
     try {
       await clearApiKeyApi()
       await authStore.fetchUserInfo()
-      ElMessage.success('API Key 已清除，已切换至免费模式')
+      ElMessage.success('API 配置已清除，已切换至免费模式')
       form.value.apiKey = ''
+      form.value.provider = 'deepseek'
+      form.value.apiBaseUrl = ''
+      form.value.apiModel = ''
     } catch (e: unknown) {
       const msg = e instanceof Error ? e.message : '清除失败'
       ElMessage.error(msg)
@@ -144,8 +249,16 @@ function handleClear() {
   })
 }
 
+// Watch for user info changes to sync form when user already has provider config
+watch(() => authStore.user, (user) => {
+  if (user?.api_base_url || user?.api_model) {
+    form.value.apiBaseUrl = user.api_base_url || ''
+    form.value.apiModel = user.api_model || ''
+    form.value.provider = detectProvider(user.api_base_url, user.api_model)
+  }
+}, { immediate: true })
+
 onMounted(() => {
-  // Clear the form field if user already has an API key configured
   if (authStore.user?.has_api_key) {
     form.value.apiKey = ''
   }

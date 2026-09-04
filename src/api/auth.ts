@@ -18,9 +18,9 @@ export function logout() {
   return request.post<ApiResult<null>>('/auth/logout')
 }
 
-/** Update the user's DeepSeek API key (pro mode). */
-export function updateApiKey(apiKey: string) {
-  return request.put<ApiResult<UserVO>>('/auth/api-key', { api_key: apiKey })
+/** Update the user's API key and provider config (pro mode). */
+export function updateApiKey(data: { api_key: string; api_base_url?: string; api_model?: string }) {
+  return request.put<ApiResult<UserVO>>('/auth/api-key', data)
 }
 
 /** Clear the user's API key to switch back to free mode. */

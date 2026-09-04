@@ -20,10 +20,14 @@ export interface UserVO {
   email: string
   nickname: string
   avatar?: string
-  /** 用户是否已配置自己的 DeepSeek API Key */
+  /** 用户是否已配置自己的 API Key */
   has_api_key?: boolean
   /** 用户角色：user=普通用户, admin=管理员 */
   role?: string
+  /** 自定义 API 服务商 base URL */
+  api_base_url?: string
+  /** 自定义模型名称 */
+  api_model?: string
   created_at: string
 }
 
